@@ -1,0 +1,30 @@
+version: "3"
+services:
+  razorwebs-api:
+    container_name: razorwebs-api
+    restart: always
+    build: ./api
+    ports:
+      - "4000:4000"
+    depends_on:
+      - razorwebs-mongo
+  razorwebs-client:
+    container_name: razorwebs-client
+    restart: always
+    build: ./client
+    ports:
+      - "3000:3000"
+    links:
+      - razorwebs-api
+    depends_on:
+      - razorwebs-api
+  razorwebs-mongo:
+    container_name: razorwebs-mongo
+    image: mongo
+    restart: always
+    expose:
+      - "27017"
+    volumes:
+      - ./data:/data/db
+    ports:
+      - "27017:27017"
